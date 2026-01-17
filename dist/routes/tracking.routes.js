@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const tracking_controller_1 = require("../controllers/tracking.controller");
+const router = (0, express_1.Router)();
+router.post("/", tracking_controller_1.createTracking);
+router.get("/", tracking_controller_1.getAllTrackings);
+router.get("/:id", tracking_controller_1.getTracking);
+router.put("/:id", tracking_controller_1.updateTracking);
+router.delete("/:id", tracking_controller_1.deleteTracking);
+exports.default = router;
