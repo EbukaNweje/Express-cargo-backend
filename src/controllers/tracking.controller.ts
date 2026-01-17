@@ -30,7 +30,7 @@ export const updateTracking = async (req: Request, res: Response) => {
   res.json(tracking)
 }
 
-// DELETE
+// DELETE with id
 export const deleteTracking = async (req: Request, res: Response) => {
   await Tracking.findByIdAndDelete(req.params.id)
   res.json({ message: "Tracking deleted" })
