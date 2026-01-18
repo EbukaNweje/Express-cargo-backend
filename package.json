@@ -4,13 +4,20 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EbukaNweje/Express-cargo-backend.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EbukaNweje/Express-cargo-backend/issues"
+  },
+  "homepage": "https://github.com/EbukaNweje/Express-cargo-backend#readme",
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
@@ -19,10 +26,6 @@
     "mongoose": "^9.1.4"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/node": "^25.0.9",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
+    "nodemon": "^3.1.11"
   }
 }
