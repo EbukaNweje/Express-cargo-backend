@@ -5,9 +5,22 @@ exports.createTracking = async (req, res) => {
   res.status(201).json(tracking);
 };
 
-exports.getAllTrackings = async (_, res) => {
-  const trackings = await Tracking.find().sort({ createdAt: -1 });
-  res.json(trackings);
+exports.getAllTrackings = async (req, res) => {
+  try {
+    const trackings = await Tracking.find();
+    res.status(200).json({
+      success: true,
+      data: trackings,
+      count: trackings.length,
+    });
+  } catch (error) {
+    console.error("Error fetching trackings:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching trackings",
+      error: error.message,
+    });
+  }
 };
 
 exports.getTracking = async (req, res) => {
