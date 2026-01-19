@@ -2,7 +2,7 @@ const router = require("express").Router();
 const controller = require("../controllers/tracking.controller");
 
 router.post("/", controller.createTracking);
-router.get("/", controller.getAllTrackings);
+router.get("/getalltracking", controller.getAllTrackings);
 router.get("/:id", controller.getTracking);
 router.put("/:id", controller.updateTracking);
 router.delete("/:id", controller.deleteTracking);
