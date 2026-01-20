@@ -33,20 +33,41 @@ const connectDB = async () => {
     return;
   }
 
+  const connectionOptions = {
+    // serverSelectionTimeoutMS: 30000,
+    // socketTimeoutMS: 45000,
+    // bufferMaxEntries: 0,
+    // maxPoolSize: 10,
+    // minPoolSize: 1,
+    // maxIdleTimeMS: 30000,
+    // family: 4, // Force IPv4
+  };
+
   try {
-    await mongoose.connect(Db, {
-      // serverSelectionTimeoutMS: 30000,
-      // socketTimeoutMS: 45000,
-      // bufferMaxEntries: 0,
-      // maxPoolSize: 10,
-      // minPoolSize: 1,
-      // maxIdleTimeMS: 30000,
-    });
+    // Try primary connection string first
+    await mongoose.connect(Db, connectionOptions);
     isConnected = true;
     console.log("Database connected successfully");
   } catch (err) {
-    console.log("Database connection error:", err.message);
-    throw err;
+    console.log(
+      "Primary connection failed, trying alternative...",
+      err.message,
+    );
+
+    // Alternative connection string without srv
+    const altDb = Db.replace("mongodb+srv://", "mongodb://").replace(
+      "/?",
+      ":27017/cargo_logistics?",
+    );
+
+    try {
+      await mongoose.connect(altDb, connectionOptions);
+      isConnected = true;
+      console.log("Database connected with alternative connection");
+    } catch (altErr) {
+      console.log("Alternative connection also failed:", altErr.message);
+      throw altErr;
+    }
   }
 };
 
