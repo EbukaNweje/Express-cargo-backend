@@ -1,0 +1,46 @@
+const Admin = require("../controllers/Admin");
+// const { SuperAdminAuth } = require("../middleware/Middleware");
+// const { testDailyInterest } = require("../api/test-daily-interest");
+const router = require("express").Router();
+
+router.post("/adminlogin", Admin.adminLogin);
+router.post("/createadmin", Admin.createAdmin);
+// router.put("/approve/:depositId", SuperAdminAuth, Admin.approveDeposit);
+// router.get("/allusers", Admin.getAllUsers);
+// router.get("/alldeposits", Admin.getAllDeposits);
+// router.get("/allwithdrawals", Admin.getAllWithdrawals);
+// router.delete("/deletedeposit/:id", SuperAdminAuth, Admin.deleteDeposit);
+// router.delete("/deleteuser/:id", SuperAdminAuth, Admin.deleteUser);
+// router.delete("/deletewithdrawal/:id", SuperAdminAuth, Admin.deleteWithdrawal);
+// router.put(
+//   "/approvewithdrawal/:withdrawalId",
+//   SuperAdminAuth,
+//   Admin.approveWithdrawal
+// );
+// router.put("/updateuseremail/:id", SuperAdminAuth, Admin.updateUserEmail);
+// router.patch(
+//   "/changeuserpassword/:id",
+//   SuperAdminAuth,
+//   Admin.changeUserPassword
+// );
+// router.patch("/changeuserpin/:id", SuperAdminAuth, Admin.changeUserPin);
+// router.patch("/blockuser/:id", SuperAdminAuth, Admin.blockUser);
+// router.patch("/unblockuser/:id", SuperAdminAuth, Admin.unblockUser);
+// router.get("/totaldailydeposit", Admin.totalDalyDeposit);
+// router.get("/totaldailywithdrawals", Admin.totalDailyWithdrawals);
+// router.get("/totalpendingdeposits", Admin.totalPendingDeposits);
+// router.get("/totalpendingwithdrawals", Admin.totalPendingWithdrawals);
+// router.get("/totalblockedandactiveusers", Admin.totalBlockedAndActiveUsers);
+// router.get("/totalactivesubscribers", Admin.totalActiveSubscribers);
+// router.get("/getadmins", Admin.getAdmins);
+// router.post("/createWalletAddress", SuperAdminAuth, Admin.CreateWallet);
+// router.get("/getallWalletAddress", Admin.getAllWalletAddress);
+// router.delete(
+//   "/deleteWalletAddress/:id",
+//   SuperAdminAuth,
+//   Admin.deleteWalletAddress
+// );
+// router.patch("/updateWalletAdddrss", SuperAdminAuth, Admin.updateWalletAddress);
+// router.get("/getoneWalletAddress/:id", Admin.getOneWalletAddress);
+// router.get("/test-daily-interest", testDailyInterest);
+module.exports = router;
