@@ -1,7 +1,8 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-require("dotenv").config({ path: "./config/index.env" });
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config/index.env" });
 
 exports.createAdmin = async (req, res, next) => {
   try {
@@ -34,7 +35,6 @@ exports.adminLogin = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
     // Debug JWT secret
     console.log("JWT Secret:", process.env.JWT);
 
