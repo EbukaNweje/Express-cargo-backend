@@ -157,7 +157,8 @@ exports.getTracking = async (req, res) => {
   try {
     await ensureConnection();
 
-    const tracking = await Tracking.findById(req.params.id);
+    const { trackingNumber } = req.params;
+    const tracking = await Tracking.findOne({ trackingNumber });
     if (!tracking) {
       return res.status(404).json({
         success: false,

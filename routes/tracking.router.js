@@ -3,7 +3,7 @@ const controller = require("../controllers/tracking.controller");
 
 router.post("/", controller.createTracking);
 router.get("/getalltracking", controller.getAllTrackings);
-router.get("/:id", controller.getTracking);
+router.get("/:trackingNumber", controller.getTracking);
 router.put("/:id", controller.updateTracking);
 router.delete("/:id", controller.deleteTracking);
 
