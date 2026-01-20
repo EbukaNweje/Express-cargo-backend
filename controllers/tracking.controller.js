@@ -3,13 +3,25 @@ const mongoose = require("mongoose");
 
 // Ensure connection before operations
 const ensureConnection = async () => {
-  if (mongoose.connection.readyState !== 1) {
-    await mongoose.connect(process.env.DATABASE, {
-      serverSelectionTimeoutMS: 30000,
-      socketTimeoutMS: 45000,
-      bufferMaxEntries: 0,
-      maxPoolSize: 10,
-    });
+  if (mongoose.connection.readyState === 1) {
+    return; // Already connected
+  }
+
+  const connectionOptions = {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+    maxPoolSize: 10,
+    minPoolSize: 1,
+    maxIdleTimeMS: 30000,
+    family: 4, // Force IPv4
+  };
+
+  try {
+    await mongoose.connect(process.env.DATABASE, connectionOptions);
+    console.log("Database connected in tracking controller");
+  } catch (error) {
+    console.error("Tracking controller DB connection error:", error);
+    throw error;
   }
 };
 

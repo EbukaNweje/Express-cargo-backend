@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
 // Load environment variables for controller
 if (process.env.NODE_ENV !== "production") {
@@ -11,8 +12,34 @@ if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
+// Database connection function for serverless
+const ensureConnection = async () => {
+  if (mongoose.connection.readyState === 1) {
+    return; // Already connected
+  }
+
+  const connectionOptions = {
+    serverSelectionTimeoutMS: 30000,
+    socketTimeoutMS: 45000,
+    maxPoolSize: 10,
+    minPoolSize: 1,
+    maxIdleTimeMS: 30000,
+    family: 4, // Force IPv4
+  };
+
+  try {
+    await mongoose.connect(process.env.DATABASE, connectionOptions);
+    console.log("Database connected in controller");
+  } catch (error) {
+    console.error("Controller DB connection error:", error);
+    throw error;
+  }
+};
+
 exports.createAdmin = async (req, res, next) => {
   try {
+    await ensureConnection();
+
     const { email, password, fullName } = req.body;
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ email });
@@ -27,19 +54,22 @@ exports.createAdmin = async (req, res, next) => {
       .status(201)
       .json({ message: "Admin created successfully", data: admin });
   } catch (error) {
+    console.error("Create admin error:", error);
     res.status(500).json({ message: error.message });
   }
 };
 
 exports.adminLogin = async (req, res, next) => {
   try {
+    await ensureConnection();
+
     console.log("=== DEBUG INFO ===");
-    console.log("Current working directory:", process.cwd());
-    console.log("__dirname:", __dirname);
-    console.log("All env vars:", Object.keys(process.env));
+    console.log("Mongoose connection state:", mongoose.connection.readyState);
     console.log("JWT from env:", process.env.JWT);
-    console.log("JWT type:", typeof process.env.JWT);
-    console.log("JWT length:", process.env.JWT ? process.env.JWT.length : 0);
+    console.log(
+      "DATABASE from env:",
+      process.env.DATABASE ? "loaded" : "not loaded",
+    );
     console.log("==================");
 
     const { email, password } = req.body;
