@@ -5,6 +5,7 @@ const router = require("express").Router();
 
 router.post("/adminlogin", Admin.adminLogin);
 router.post("/createadmin", Admin.createAdmin);
+router.get("/testjwt", Admin.testJWT);
 // router.put("/approve/:depositId", SuperAdminAuth, Admin.approveDeposit);
 // router.get("/allusers", Admin.getAllUsers);
 // router.get("/alldeposits", Admin.getAllDeposits);

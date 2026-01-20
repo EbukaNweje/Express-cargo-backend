@@ -1,8 +1,15 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config/index.env" });
+
+// Load environment variables for controller
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: path.join(__dirname, "../config/index.env") });
+} else {
+  dotenv.config();
+}
 
 exports.createAdmin = async (req, res, next) => {
   try {
@@ -26,6 +33,15 @@ exports.createAdmin = async (req, res, next) => {
 
 exports.adminLogin = async (req, res, next) => {
   try {
+    console.log("=== DEBUG INFO ===");
+    console.log("Current working directory:", process.cwd());
+    console.log("__dirname:", __dirname);
+    console.log("All env vars:", Object.keys(process.env));
+    console.log("JWT from env:", process.env.JWT);
+    console.log("JWT type:", typeof process.env.JWT);
+    console.log("JWT length:", process.env.JWT ? process.env.JWT.length : 0);
+    console.log("==================");
+
     const { email, password } = req.body;
     const admin = await Admin.findOne({ email });
     if (!admin) {
@@ -35,10 +51,12 @@ exports.adminLogin = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    // Debug JWT secret
-    console.log("JWT Secret:", process.env.JWT);
 
-    const jwtSecret = process.env.JWT || "Availtrade";
+    // Use a hardcoded secret for now to test
+    const jwtSecret = process.env.JWT || "Availtrade_fallback_secret_key_2024";
+
+    console.log("Using JWT secret:", jwtSecret);
+    console.log("Secret length:", jwtSecret.length);
 
     const token = jwt.sign({ id: admin._id, super: admin.super }, jwtSecret, {
       expiresIn: "1d",
@@ -47,5 +65,33 @@ exports.adminLogin = async (req, res, next) => {
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.testJWT = async (req, res) => {
+  try {
+    console.log("=== JWT TEST ===");
+    console.log("process.env.JWT:", process.env.JWT);
+    console.log("JWT type:", typeof process.env.JWT);
+
+    const testSecret = process.env.JWT || "fallback_secret";
+    console.log("Using secret:", testSecret);
+
+    const testToken = jwt.sign({ test: "data" }, testSecret, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({
+      message: "JWT test successful",
+      secret: testSecret,
+      token: testToken,
+    });
+  } catch (error) {
+    console.error("JWT test error:", error);
+    res.status(500).json({
+      message: "JWT test failed",
+      error: error.message,
+      secret: process.env.JWT,
+    });
   }
 };

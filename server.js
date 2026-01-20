@@ -1,6 +1,25 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config/index.env" });
+
+// Load environment variables - try multiple paths for different environments
+if (process.env.NODE_ENV !== "production") {
+  // Local development
+  dotenv.config({ path: "./config/index.env" });
+} else {
+  // Production - Vercel will use .env or dashboard variables
+  dotenv.config();
+}
+
+// Debug environment loading
+console.log("=== SERVER ENV DEBUG ===");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("JWT from server.js:", process.env.JWT ? "loaded" : "not loaded");
+console.log(
+  "DATABASE from server.js:",
+  process.env.DATABASE ? "loaded" : "not loaded",
+);
+console.log("========================");
+
 const Db = process.env.DATABASE;
 
 // Optimize for serverless
