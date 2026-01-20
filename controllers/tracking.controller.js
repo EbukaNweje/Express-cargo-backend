@@ -22,7 +22,80 @@ exports.createTracking = async (req, res) => {
       });
     }
 
-    const tracking = await Tracking.create(req.body);
+    const {
+      trackingNumber,
+      currentLocation,
+      estimatedDelivery,
+      status,
+      progress,
+      events,
+    } = req.body;
+
+    // Validate required fields
+    if (!trackingNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Tracking number is required",
+      });
+    }
+
+    if (!currentLocation) {
+      return res.status(400).json({
+        success: false,
+        message: "Current location is required",
+      });
+    }
+
+    if (!estimatedDelivery) {
+      return res.status(400).json({
+        success: false,
+        message: "Estimated delivery date is required",
+      });
+    }
+
+    // Validate status enum
+    const validStatuses = ["Pending", "In Transit", "Delivered"];
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: `Status must be one of: ${validStatuses.join(", ")}`,
+      });
+    }
+
+    // Validate progress is a number between 0-100
+    if (progress !== undefined) {
+      if (typeof progress !== "number" || progress < 0 || progress > 100) {
+        return res.status(400).json({
+          success: false,
+          message: "Progress must be a number between 0 and 100",
+        });
+      }
+    }
+
+    // Validate events array structure if provided
+    if (events && Array.isArray(events)) {
+      for (const event of events) {
+        if (!event.date || !event.status || !event.location) {
+          return res.status(400).json({
+            success: false,
+            message: "Each event must have date, status, and location",
+          });
+        }
+      }
+    }
+
+    // Create tracking with validated data
+    const trackingData = {
+      trackingNumber,
+      currentLocation,
+      estimatedDelivery,
+      status: status || "Pending",
+      progress: progress || 0,
+      events: events || [],
+    };
+
+    const tracking = await Tracking.create(trackingData);
+
     res.status(201).json({
       success: true,
       message: "Tracking created successfully",
@@ -30,6 +103,15 @@ exports.createTracking = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating tracking:", error);
+
+    // Handle duplicate tracking number error
+    if (error.code === 11000 && error.keyPattern.trackingNumber) {
+      return res.status(409).json({
+        success: false,
+        message: "Tracking number already exists",
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: "Error creating tracking",
