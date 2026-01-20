@@ -1,6 +1,7 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config({ path: "./config/index.env" });
 
 exports.createAdmin = async (req, res, next) => {
   try {
@@ -33,15 +34,18 @@ exports.adminLogin = async (req, res, next) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign(
-      { id: admin._id, super: admin.super },
-      process.env.JWT,
-      {
-        expiresIn: "1d",
-      },
-    );
+
+    // Debug JWT secret
+    console.log("JWT Secret:", process.env.JWT);
+
+    const jwtSecret = process.env.JWT || "Availtrade";
+
+    const token = jwt.sign({ id: admin._id, super: admin.super }, jwtSecret, {
+      expiresIn: "1d",
+    });
     res.status(200).json({ message: "Login successful", token });
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({ message: error.message });
   }
 };
