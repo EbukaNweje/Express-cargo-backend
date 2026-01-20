@@ -27,6 +27,8 @@ const ensureConnection = async () => {
 
 exports.createTracking = async (req, res) => {
   try {
+    await ensureConnection();
+
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({
         success: false,
@@ -153,6 +155,8 @@ exports.getAllTrackings = async (req, res) => {
 
 exports.getTracking = async (req, res) => {
   try {
+    await ensureConnection();
+
     const tracking = await Tracking.findById(req.params.id);
     if (!tracking) {
       return res.status(404).json({
@@ -176,6 +180,8 @@ exports.getTracking = async (req, res) => {
 
 exports.updateTracking = async (req, res) => {
   try {
+    await ensureConnection();
+
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({
         success: false,
@@ -209,6 +215,8 @@ exports.updateTracking = async (req, res) => {
 
 exports.deleteTracking = async (req, res) => {
   try {
+    await ensureConnection();
+
     const tracking = await Tracking.findByIdAndDelete(req.params.id);
     if (!tracking) {
       return res.status(404).json({
