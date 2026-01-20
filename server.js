@@ -3,25 +3,36 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/index.env" });
 const Db = process.env.DATABASE;
 
-mongoose
-  .connect(Db, {})
-  .then(() => {
+// Optimize for serverless
+// mongoose.set("bufferCommands", false);
+// mongoose.set("bufferMaxEntries", 0);
+
+let isConnected = false;
+
+const connectDB = async () => {
+  if (isConnected) {
+    return;
+  }
+
+  try {
+    await mongoose.connect(Db, {
+      // serverSelectionTimeoutMS: 30000,
+      // socketTimeoutMS: 45000,
+      // bufferMaxEntries: 0,
+      // maxPoolSize: 10,
+      // minPoolSize: 1,
+      // maxIdleTimeMS: 30000,
+    });
+    isConnected = true;
     console.log("Database connected successfully");
-  })
-  .catch((err) => {
+  } catch (err) {
     console.log("Database connection error:", err.message);
-    console.log("Retrying connection in 5 seconds...");
-    setTimeout(() => {
-      mongoose
-        .connect(Db, {})
-        .then(() => {
-          console.log("Database connected successfully on retry");
-        })
-        .catch((retryErr) => {
-          console.log("Database connection failed on retry:", retryErr.message);
-        });
-    }, 5000);
-  });
+    throw err;
+  }
+};
+
+// Connect to database
+connectDB().catch(console.error);
 
 const app = require("./App");
 

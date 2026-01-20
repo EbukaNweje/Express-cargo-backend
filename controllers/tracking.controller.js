@@ -1,4 +1,17 @@
 const Tracking = require("../models/Tracking");
+const mongoose = require("mongoose");
+
+// Ensure connection before operations
+const ensureConnection = async () => {
+  if (mongoose.connection.readyState !== 1) {
+    await mongoose.connect(process.env.DATABASE, {
+      serverSelectionTimeoutMS: 30000,
+      socketTimeoutMS: 45000,
+      bufferMaxEntries: 0,
+      maxPoolSize: 10,
+    });
+  }
+};
 
 exports.createTracking = async (req, res) => {
   try {
@@ -27,6 +40,7 @@ exports.createTracking = async (req, res) => {
 
 exports.getAllTrackings = async (req, res) => {
   try {
+    await ensureConnection();
     const trackings = await Tracking.find();
     res.status(200).json({
       success: true,
