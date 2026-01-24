@@ -6,7 +6,10 @@ exports.sendEmail = async (options) => {
     const response = await axios.post(
       "https://api.brevo.com/v3/smtp/email",
       {
-        sender: { email: process.env.BREVO_USER, name: "YATiCare" },
+        sender: {
+          email: process.env.BREVO_USER,
+          name: "Express Cargo Shipping Logistics",
+        },
         to: [{ email: options.email }],
         subject: options.subject,
         htmlContent: options.html,
@@ -16,13 +19,13 @@ exports.sendEmail = async (options) => {
           "api-key": process.env.BREVO_API_KEY,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
     console.log("Email sent successfully:", response.data);
   } catch (error) {
     console.error(
       "Error sending email:",
-      error.response ? error.response.data : error.message
+      error.response ? error.response.data : error.message,
     );
   }
 };

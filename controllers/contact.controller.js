@@ -1,6 +1,6 @@
 const Contact = require("../models/Contact");
 const mongoose = require("mongoose");
-const { sendEmail } = require("../utilities/email");
+const { sendEmail } = require("../utilities/brevo");
 const emailTemplates = require("../middleware/emailTemplate");
 
 // Ensure connection before operations
@@ -61,11 +61,11 @@ exports.createContact = async (req, res) => {
     // Send confirmation email to user
     try {
       const userEmailTemplate = emailTemplates.contactConfirmation(contact);
-      await sendEmail(
-        email,
-        "We've Received Your Message - Express Cargo",
-        userEmailTemplate,
-      );
+      await sendEmail({
+        email: email,
+        subject: "We've Received Your Message - Express Cargo",
+        html: userEmailTemplate,
+      });
     } catch (emailError) {
       console.error("Error sending confirmation email to user:", emailError);
       // Continue even if email fails
@@ -77,11 +77,11 @@ exports.createContact = async (req, res) => {
         process.env.ADMIN_EMAIL || "expresscargoshippinglogisticss@gmail.com";
       const adminEmailTemplate =
         emailTemplates.contactNotificationAdmin(contact);
-      await sendEmail(
-        adminEmail,
-        `New Contact Submission from ${fullName}`,
-        adminEmailTemplate,
-      );
+      await sendEmail({
+        email: adminEmail,
+        subject: `New Contact Submission from ${fullName}`,
+        html: adminEmailTemplate,
+      });
     } catch (emailError) {
       console.error("Error sending notification email to admin:", emailError);
       // Continue even if email fails
