@@ -11,7 +11,6 @@ const FACEBOOK_URL =
 
 const getDate = new Date().getFullYear();
 
-// Brand Colors
 const PRIMARY_BLUE = "#05157e";
 const SUCCESS_GREEN = "#002611";
 const WARNING_ORANGE = "#E9C46A";
@@ -81,38 +80,6 @@ const baseEmailTemplate = (title, mainContent, accentColor = PRIMARY_BLUE) => {
               </td>
             </tr>
 
-            <!-- Footer -->
-            // <tr>
-            //   <td style="${footerBgStyle}">
-            //     <table width="80%" cellpadding="0" cellspacing="0" border="0" style="color: #ffffff; margin: 0 auto;">
-            //       <tr>
-            //         <td align="center">
-            //           <h3 style="margin: 0; font-size: 22px;">Yaticare</h3>
-            //           <p style="margin: 8px 0 20px; font-size: 13px;">Powerful Community-Driven Financial Model.</p>
-            //           <div style="margin-top: 10px;">
-            //             <a href="https://www.linkedin.com/company/traceaid" target="_blank" style="margin: 0 6px;">
-            //               <img src="${LINKEDIN_URL}" width="20" alt="LinkedIn" style="vertical-align: middle;">
-            //             </a>
-            //             <a href="https://web.facebook.com/profile.php?id=61578288375402" target="_blank" style="margin: 0 6px;">
-            //               <img src="${FACEBOOK_URL}" width="20" alt="Facebook" style="vertical-align: middle;">
-            //             </a>
-            //             <a href="https://www.instagram.com/traceaid" target="_blank" style="margin: 0 6px;">
-            //               <img src="${INSTAGRAM_URL}" width="20" alt="Instagram" style="vertical-align: middle;">
-            //             </a>
-            //           </div>
-            //           <p style="margin-top: 15px; font-size: 13px;">
-            //             Contact us:
-            //             <a href="mailto:yatihelpdesk@gmail.com" style="color: #fff; text-decoration: underline;">
-            //               yatihelpdesk@gmail.com
-            //             </a>
-            //           </p>
-            //           <p style="font-size: 12px; margin-top: 10px;">&copy; ${getDate} YaTiCare. All rights reserved.</p>
-            //         </td>
-            //       </tr>
-            //     </table>
-            //   </td>
-            // </tr>
-
           </table>
         </td>
       </tr>
@@ -122,8 +89,6 @@ const baseEmailTemplate = (title, mainContent, accentColor = PRIMARY_BLUE) => {
 </html>
   `;
 };
-
-// Contact Form - Confirmation Email to User
 exports.contactConfirmation = (contact) => {
   const mainContent = `
     <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">We've Received Your Message</h1>
@@ -147,7 +112,6 @@ exports.contactConfirmation = (contact) => {
   return baseEmailTemplate("Message Received - Express Cargo", mainContent);
 };
 
-// Contact Form - Admin Notification Email
 exports.contactNotificationAdmin = (contact) => {
   const mainContent = `
     <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">New Contact Message</h1>
