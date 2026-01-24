@@ -1,6 +1,7 @@
 const WATERMARK_URL =
   "https://res.cloudinary.com/dfefiap2l/image/upload/v1761935062/Email_footer_banner_1_iyfoix.png";
-const LOGO_URL = "https://ya-ti-pauy.vercel.app/assets/logo-B_SQKxUG.png";
+const LOGO_URL =
+  "https://expresscargoshippinglogistics.vercel.app/assets/expLogo-C-_JBLZo.png";
 const LINKEDIN_URL =
   "https://res.cloudinary.com/dbzzkaa97/image/upload/v1754433533/linkedIn_ggxxm4.png";
 const INSTAGRAM_URL =
@@ -11,7 +12,7 @@ const FACEBOOK_URL =
 const getDate = new Date().getFullYear();
 
 // Brand Colors
-const PRIMARY_BLUE = "#4caf50";
+const PRIMARY_BLUE = "#05157e";
 const SUCCESS_GREEN = "#002611";
 const WARNING_ORANGE = "#E9C46A";
 const ALERT_RED = "#E76F51";
@@ -81,36 +82,36 @@ const baseEmailTemplate = (title, mainContent, accentColor = PRIMARY_BLUE) => {
             </tr>
 
             <!-- Footer -->
-            <tr>
-              <td style="${footerBgStyle}">
-                <table width="80%" cellpadding="0" cellspacing="0" border="0" style="color: #ffffff; margin: 0 auto;">
-                  <tr>
-                    <td align="center">
-                      <h3 style="margin: 0; font-size: 22px;">Yaticare</h3>
-                      <p style="margin: 8px 0 20px; font-size: 13px;">Powerful Community-Driven Financial Model.</p>
-                      <div style="margin-top: 10px;">
-                        <a href="https://www.linkedin.com/company/traceaid" target="_blank" style="margin: 0 6px;">
-                          <img src="${LINKEDIN_URL}" width="20" alt="LinkedIn" style="vertical-align: middle;">
-                        </a>
-                        <a href="https://web.facebook.com/profile.php?id=61578288375402" target="_blank" style="margin: 0 6px;">
-                          <img src="${FACEBOOK_URL}" width="20" alt="Facebook" style="vertical-align: middle;">
-                        </a>
-                        <a href="https://www.instagram.com/traceaid" target="_blank" style="margin: 0 6px;">
-                          <img src="${INSTAGRAM_URL}" width="20" alt="Instagram" style="vertical-align: middle;">
-                        </a>
-                      </div>
-                      <p style="margin-top: 15px; font-size: 13px;">
-                        Contact us:
-                        <a href="mailto:yatihelpdesk@gmail.com" style="color: #fff; text-decoration: underline;">
-                          yatihelpdesk@gmail.com
-                        </a>
-                      </p>
-                      <p style="font-size: 12px; margin-top: 10px;">&copy; ${getDate} YaTiCare. All rights reserved.</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
+            // <tr>
+            //   <td style="${footerBgStyle}">
+            //     <table width="80%" cellpadding="0" cellspacing="0" border="0" style="color: #ffffff; margin: 0 auto;">
+            //       <tr>
+            //         <td align="center">
+            //           <h3 style="margin: 0; font-size: 22px;">Yaticare</h3>
+            //           <p style="margin: 8px 0 20px; font-size: 13px;">Powerful Community-Driven Financial Model.</p>
+            //           <div style="margin-top: 10px;">
+            //             <a href="https://www.linkedin.com/company/traceaid" target="_blank" style="margin: 0 6px;">
+            //               <img src="${LINKEDIN_URL}" width="20" alt="LinkedIn" style="vertical-align: middle;">
+            //             </a>
+            //             <a href="https://web.facebook.com/profile.php?id=61578288375402" target="_blank" style="margin: 0 6px;">
+            //               <img src="${FACEBOOK_URL}" width="20" alt="Facebook" style="vertical-align: middle;">
+            //             </a>
+            //             <a href="https://www.instagram.com/traceaid" target="_blank" style="margin: 0 6px;">
+            //               <img src="${INSTAGRAM_URL}" width="20" alt="Instagram" style="vertical-align: middle;">
+            //             </a>
+            //           </div>
+            //           <p style="margin-top: 15px; font-size: 13px;">
+            //             Contact us:
+            //             <a href="mailto:yatihelpdesk@gmail.com" style="color: #fff; text-decoration: underline;">
+            //               yatihelpdesk@gmail.com
+            //             </a>
+            //           </p>
+            //           <p style="font-size: 12px; margin-top: 10px;">&copy; ${getDate} YaTiCare. All rights reserved.</p>
+            //         </td>
+            //       </tr>
+            //     </table>
+            //   </td>
+            // </tr>
 
           </table>
         </td>
@@ -122,462 +123,59 @@ const baseEmailTemplate = (title, mainContent, accentColor = PRIMARY_BLUE) => {
   `;
 };
 
-exports.referrial = (referrer) => {
+// Contact Form - Confirmation Email to User
+exports.contactConfirmation = (contact) => {
   const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">You've Got A New Referral</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${referrer.userName},</p>
+    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">We've Received Your Message</h1>
+    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${contact.fullName},</p>
     <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      A new user joined YATiCare using your referral link. Thank you for growing our community!
+      Thank you for reaching out to us! We've received your message and our team will review it shortly.
     </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Welcome to YatiCare", mainContent);
-};
-
-exports.registerEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Welcome To YatiCare</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your YATiCare account was created successfully. Start exploring community-driven financial growth today!
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Welcome to YatiCare", mainContent);
-};
-exports.loginEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Recent Login Activity</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      You’ve logged into your YATiCare account. If this wasn’t you, secure your account immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Recent Login Activity", mainContent);
-};
-exports.forgetPasswordEmail = (userData, resetLink) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Password Reset Request</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      You requested a password reset. Click the button below to update your credentials:
-    </p>
-    <div style="text-align: center; margin: 30px 0;">
-      <a href="${resetLink}" style="background-color: ${PRIMARY_BLUE}; color: #fff; padding: 12px 20px; border-radius: 6px; font-weight: 600; display: inline-block;">
-        Reset Password
-      </a>
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid ${PRIMARY_BLUE};">
+      <p style="font-size: 14px; color: #666; margin: 5px 0;"><strong>Your Details:</strong></p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;">Email: ${contact.email}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;">Phone: ${contact.phone}</p>
+      ${contact.company ? `<p style="font-size: 14px; color: #666; margin: 8px 0;">Company: ${contact.company}</p>` : ""}
+      <p style="font-size: 14px; color: #666; margin: 8px 0;">Preferred Contact: ${contact.preferredContactMethod === "email" ? "Email" : "Phone"}</p>
     </div>
-    <p style="font-size: 14px; color: #999;">
-      If you didn’t request this, please ignore this email.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Password Reset Request", mainContent);
-};
-
-exports.passwordChangeEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Welcome To YatiCare</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your YATiCare password was changed successfully. Contact us if you didn’t make this change.  
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Password Change Success", mainContent);
-};
-
-exports.changePasswordEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Password Changed Successfully</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your password has been changed successfully. If this was you, no further action is needed.
-    </p>
-    <p style="font-size: 14px; color: #999;">
-      If you did not initiate this change, please reset your password immediately or contact our support team.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Password Change Confirmation", mainContent);
-};
-
-exports.pinCreatedEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">PIN Created Successfully</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your transaction PIN has been created successfully. You can now securely authorize payments and access sensitive features.
-    </p>
-    <p style="font-size: 14px; color: #999;">
-      If you did not initiate this action, please update your PIN immediately or contact support.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("PIN Created Successfully", mainContent);
-};
-
-exports.pinChangedEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">PIN Changed Successfully</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your transaction PIN has been changed successfully. You can now continue using YATiCare securely.
-    </p>
-    <p style="font-size: 14px; color: #999;">
-      If you did not initiate this change, please reset your PIN immediately or contact our support team.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("PIN Change Confirmation", mainContent);
-};
-
-exports.RequestDEmail = (user) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Deposit Request Initiated</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hello ${user.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-         You have initiated a deposit request. Your deposit will reflect after being processed successfully.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Deposit Request Initiated", mainContent);
-};
-
-exports.depositCompletedEmail = (userData, deposit) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Deposit Completed</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-         Your deposit of <strong>$${deposit.amount}</strong> is now in your YATiCare Back Office. Start growing and earning with the community!    
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Deposit Completed", mainContent);
-};
-
-exports.withdrawalRequestEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Withdrawal Request Initiated</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-         Your withdrawal request is being processed. Allow up to 48 hours for completion.    
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Withdrawal Request Initiated", mainContent);
-};
-
-exports.withdrawalCompletedEmail = (userData, withdrawal) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Withdrawal Completed</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your withdrawal of $${withdrawal.amount} has been processed successfully and sent to your linked address. Thank you for choosing YATiCare! 
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Withdrawal Completed", mainContent);
-};
-
-exports.contributionCycleStartsEmail = (userData, subscription) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Your Contribution Cycle Starts Soon</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-         Wow! We are excited about your earnings so far, and we believe you are too.    
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-         Your next contribution of ${subscription.amount} begins in 24 hours You may wish to upgrade too.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-         Ensure funds are in your wallet for seamless processing, trading and more daily profits.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Your Contribution Cycle Starts Soon", mainContent);
-};
-
-exports.referralCommissionEmail = (userData, commissionAmount) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Referral Commission Earned</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${
-      userData.userName
-    },</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Great news! You've just earned a referral commission of <strong>$${commissionAmount.toFixed(
-        2,
-      )}</strong> for inviting a new member to YATiCare.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Thank you for helping grow our community. Your bonus has been added to your account balance.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Keep sharing and keep earning!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Referral Commission Earned", mainContent);
-};
-
-exports.subscriptionCreatedEmail = (userData, subscription) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Subscription Created Successfully</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${
-      userData.userName
-    },</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your subscription of <strong>$${subscription.amount.toFixed(
-        2,
-      )}</strong> has been successfully activated on <strong>${new Date(
-        subscription.startDate,
-      ).toLocaleDateString()}</strong>.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      You’ll begin earning daily interest and can track your progress in your dashboard.
-    </p>
-    <p style="font-size: 14px; color: #999;">
-      If you have any questions or didn’t authorize this subscription, please contact our support team immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Welcome aboard!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Subscription Created Successfully", mainContent);
-};
-
-exports.subscriptionRecycledEmail = (userData, subscription) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Subscription Recycled Successfully</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${
-      userData.userName
-    },</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your subscription of <strong>$${subscription.amount.toFixed(
-        2,
-      )}</strong> has been successfully recycled. Your new cycle begins on <strong>${new Date(
-        subscription.startDate,
-      ).toLocaleDateString()}</strong> and ends on <strong>${new Date(
-        subscription.endDate,
-      ).toLocaleDateString()}</strong>.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      You’ll continue earning daily interest and enjoying all your benefits without interruption.
-    </p>
-    <p style="font-size: 14px; color: #999;">
-      If you didn’t authorize this action, please contact our support team immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Thank you for staying with us!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Subscription Recycled Successfully", mainContent);
-};
-
-exports.planUpgradedEmail = (
-  userData,
-  oldAmount,
-  newAmount,
-  upgradeDifference,
-  planName,
-) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">🚀 Plan Upgraded Successfully</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Congratulations! Your plan has been successfully upgraded to a higher investment level.
-    </p>
-    <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; background-color: #f9f9f9; border-radius: 6px; margin: 20px 0; border: 1px solid #eee;">
-      <tr>
-        <td style="padding: 15px 20px; border-bottom: 1px solid #eee; font-size: 14px; color: #666;">Previous Amount</td>
-        <td style="padding: 15px 20px; border-bottom: 1px solid #eee; font-size: 16px; font-weight: 600; color: #333;"><strong>$${oldAmount.toFixed(2)}</strong></td>
-      </tr>
-      <tr>
-        <td style="padding: 15px 20px; border-bottom: 1px solid #eee; font-size: 14px; color: #666;">New Amount</td>
-        <td style="padding: 15px 20px; border-bottom: 1px solid #eee; font-size: 16px; font-weight: 600; color: #333;"><strong>$${newAmount.toFixed(2)}</strong></td>
-      </tr>
-      <tr>
-        <td style="padding: 15px 20px; font-size: 14px; color: #666;">Upgrade Charge</td>
-        <td style="padding: 15px 20px; font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE};"><strong>$${upgradeDifference.toFixed(2)}</strong></td>
-      </tr>
-    </table>
     <p style="font-size: 16px; margin-bottom: 15px; color: #333;">
-      Your plan has been updated to <strong>${planName}</strong>. With this upgrade, you'll enjoy:
+      We'll respond to you as soon as possible using your preferred contact method.
     </p>
-    <ul style="font-size: 16px; margin-bottom: 25px; color: #333; padding-left: 20px;">
-      <li>Higher daily interest earnings</li>
-      <li>Enhanced earning potential</li>
-      <li>Access to premium features</li>
-    </ul>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your updated investment will begin earning at the new rate immediately. Check your dashboard to monitor your progress.
+    <p style="font-size: 16px; margin-top: 20px; color: #333;">Best regards,</p>
+    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">Express Cargo Shipping Team</p>
+  `;
+  return baseEmailTemplate("Message Received - Express Cargo", mainContent);
+};
+
+// Contact Form - Admin Notification Email
+exports.contactNotificationAdmin = (contact) => {
+  const mainContent = `
+    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">New Contact Message</h1>
+    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">A new contact message has been submitted:</p>
+    
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid ${PRIMARY_BLUE};">
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Name:</strong> ${contact.fullName}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Email:</strong> <a href="mailto:${contact.email}" style="color: ${PRIMARY_BLUE};">${contact.email}</a></p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Phone:</strong> <a href="tel:${contact.phone}" style="color: ${PRIMARY_BLUE};">${contact.phone}</a></p>
+      ${contact.company ? `<p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Company:</strong> ${contact.company}</p>` : ""}
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Preferred Contact Method:</strong> ${contact.preferredContactMethod === "email" ? "Email" : "Phone"}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Status:</strong> <span style="color: ${SUCCESS_GREEN}; font-weight: 600;">${contact.status.toUpperCase()}</span></p>
+    </div>
+
+    <div style="margin: 25px 0;">
+      <p style="font-size: 14px; color: #333; margin: 0 0 10px 0;"><strong>Message:</strong></p>
+      <div style="background-color: #fffbf0; padding: 15px; border-radius: 6px; border-left: 4px solid ${WARNING_ORANGE}; color: #333; font-size: 14px; line-height: 1.6;">
+        ${contact.message.replace(/\n/g, "<br>")}
+      </div>
+    </div>
+
+    <p style="font-size: 13px; color: #999; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
+      <strong>Message ID:</strong> ${contact._id}
     </p>
-    <p style="font-size: 14px; color: #999;">
-      If you didn't authorize this upgrade or have any questions, please contact our support team immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Thank you for growing with YATiCare!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
   `;
   return baseEmailTemplate(
-    "Plan Upgraded Successfully",
+    "New Contact Submission",
     mainContent,
-    PRIMARY_BLUE,
+    WARNING_ORANGE,
   );
-};
-
-exports.adminPasswordUpdateEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Your Password Was Updated by Admin</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your account password was updated by an administrator. You can now log in using your new credentials.
-    </p>
-    <p style="font-size: 14px; color: #999;">
-      If you did not request this change or have concerns, please contact our support team immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Stay secure, stay empowered.</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Admin-Initiated Password Update", mainContent);
-};
-
-exports.userBlockedEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: ${ALERT_RED}; margin-bottom: 20px;">Account Blocked</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your YATiCare account has been blocked by an administrator.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Regards,</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Account Blocked", mainContent);
-};
-
-exports.userUnblockedEmail = (userData) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: ${SUCCESS_GREEN}; margin-bottom: 20px;">Account Unblocked</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${userData.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your YATiCare account has been unblocked by an administrator. You now have full access to your account and services.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Welcome back!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Account Unblocked", mainContent);
-};
-
-exports.firstTimeReferralBonusEmail = (userData, bonusAmount) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">🎉 First Time Referral Bonus Earned!</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${
-      userData.userName
-    },</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Congratulations! You've earned a <strong>$${bonusAmount.toFixed(
-        2,
-      )}</strong> bonus for referring a new member to YATiCare.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      This is your first successful referral — thank you for helping us grow our community!
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Keep sharing your invite link and keep earning!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("First Time Referral Bonus", mainContent);
-};
-exports.recurringReferralBonusEmail = (referrer, bonusAmount) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">🎉 Recurring Referral Bonus Earned!</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${
-      referrer.userName
-    },</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Great news! One of your invited users just renewed their subscription, and you've earned a recurring referral bonus of <strong>$${bonusAmount.toFixed(
-        2,
-      )}</strong>.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      This bonus has been added to your account balance. Keep referring and keep earning!
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Thank you for being a valued part of our community.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Keep sharing your invite link and keep earning!</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Recurring Referral Bonus", mainContent);
-};
-
-exports.phoneNumberUpdatedEmail = (user) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">📱 Phone Number Updated</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${user.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your phone number has been successfully updated in your account settings.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      If you did not make this change or believe it was made in error, please contact our support team immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Thank you for keeping your account up to date.</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Phone Number Updated", mainContent);
-};
-
-exports.walletInfoUpdatedEmail = (user) => {
-  const mainContent = `
-    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">💼 Wallet Information Added</h1>
-    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Hi ${user.userName},</p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
-      Your wallet information has been successfully Added in your account settings.
-    </p>
-    <p style="font-size: 16px; margin-bottom: 25px; color: 
-    #333;">
-      If you did not make this change or believe it was made in error, please contact our support team immediately.
-    </p>
-    <p style="font-size: 16px; margin-top: 20px; color: #333;">Thanks for keeping your account secure and up to date.</p>
-    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">YATiCare Team.</p>
-  `;
-  return baseEmailTemplate("Wallet Info Added", mainContent);
-};
-
-exports.dailyInterestAddedEmail = (user, subscription, amount) => {
-  return `
-    <div style="font-family: Arial, sans-serif; padding: 20px;">
-      <h2 style="color: #0A3D2E;">💰 Daily Interest Added</h2>
-
-      <p>Hi <strong>${user.userName}</strong>,</p>
-
-      <p>Your daily interest has just been added to your wallet.</p>
-
-      <p>
-        <strong>Plan:</strong> ${subscription.planName || "Your Plan"} <br/>
-        <strong>Interest Amount:</strong> $${amount.toFixed(2)} <br/>
-        <strong>Date:</strong> ${new Date().toLocaleString()}
-      </p>
-
-      <p>
-        Your updated account balance is now <strong>$${user.accountBalance.toFixed(
-          2,
-        )}</strong>.
-      </p>
-
-      <p>If you have any questions, feel free to contact support.</p>
-
-      <p style="margin-top: 30px; font-weight: bold; color: #0A3D2E;">
-        YATiCare Team
-      </p>
-    </div>
-  `;
 };
