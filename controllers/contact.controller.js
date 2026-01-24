@@ -1,6 +1,6 @@
 const Contact = require("../models/Contact");
 const mongoose = require("mongoose");
-const { sendEmail } = require("../utilities/brevo");
+const brevo = require("../utilities/brevo");
 const emailTemplates = require("../middleware/emailTemplate");
 
 // Ensure connection before operations
@@ -61,7 +61,7 @@ exports.createContact = async (req, res) => {
     // Send confirmation email to user
     try {
       const userEmailTemplate = emailTemplates.contactConfirmation(contact);
-      await sendEmail({
+      await brevo.sendEmail({
         email: email,
         subject: "We've Received Your Message - Express Cargo",
         html: userEmailTemplate,
@@ -77,7 +77,7 @@ exports.createContact = async (req, res) => {
         process.env.ADMIN_EMAIL || "expresscargoshippinglogisticss@gmail.com";
       const adminEmailTemplate =
         emailTemplates.contactNotificationAdmin(contact);
-      await sendEmail({
+      await brevo.sendEmail({
         email: adminEmail,
         subject: `New Contact Submission from ${fullName}`,
         html: adminEmailTemplate,
