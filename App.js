@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const admin = require("./routes/admin");
 const tracking = require("./routes/tracking.router");
 const contactRouter = require("./routes/contact.router");
+const shipmentRouter = require("./routes/shipment.router");
 const morgan = require("morgan");
 const fileUploader = require("express-fileupload");
 const bodyParser = require("body-parser");
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 app.use("/api/admin", admin);
 app.use("/api/tracking", tracking);
 app.use("/api/contact", contactRouter);
+app.use("/api/shipments", shipmentRouter);
 
 app.use("/", (req, res, next) => {
   res.status(200).send("Server is running");

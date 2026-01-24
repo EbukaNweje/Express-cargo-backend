@@ -143,3 +143,90 @@ exports.contactNotificationAdmin = (contact) => {
     WARNING_ORANGE,
   );
 };
+exports.shipmentConfirmation = (shipment) => {
+  const mainContent = `
+    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">Shipment Request Confirmed</h1>
+    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">Dear ${shipment.fullName},</p>
+    <p style="font-size: 16px; margin-bottom: 25px; color: #333;">
+      Thank you for choosing Express Cargo Shipping Logistics! Your shipment request has been received and confirmed.
+    </p>
+    
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid ${PRIMARY_BLUE};">
+      <p style="font-size: 16px; color: #333; margin: 0 0 15px 0;"><strong>Shipment Details:</strong></p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>Shipment Number:</strong> ${shipment.shipmentNumber}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>From:</strong> ${shipment.origin}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>To:</strong> ${shipment.destination}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>Weight:</strong> ${shipment.weight} kg</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>Dimensions:</strong> ${shipment.formattedDimensions || `${shipment.dimensions.length}x${shipment.dimensions.width}x${shipment.dimensions.height} cm`}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>Cargo Type:</strong> ${shipment.cargoType}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>Preferred Ship Date:</strong> ${new Date(shipment.preferredShipDate).toLocaleDateString()}</p>
+      <p style="font-size: 14px; color: #666; margin: 8px 0;"><strong>Status:</strong> <span style="color: ${SUCCESS_GREEN}; font-weight: 600;">${shipment.status}</span></p>
+    </div>
+
+    <div style="background-color: #e8f5e8; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid ${SUCCESS_GREEN};">
+      <p style="font-size: 16px; color: #333; margin: 0;"><strong>Estimated Cost: $${shipment.estimatedCost}</strong></p>
+      <p style="font-size: 12px; color: #666; margin: 5px 0 0 0;">*Final cost may vary based on actual measurements and additional services</p>
+    </div>
+
+    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">
+      Our team will contact you within 24 hours to confirm the details and arrange pickup.
+    </p>
+    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">
+      You can track your shipment using the shipment number: <strong>${shipment.shipmentNumber}</strong>
+    </p>
+    
+    <p style="font-size: 16px; margin-top: 20px; color: #333;">Best regards,</p>
+    <p style="font-size: 16px; font-weight: 600; color: ${PRIMARY_BLUE}; margin: 0;">Express Cargo Shipping Team</p>
+  `;
+  return baseEmailTemplate(
+    "Shipment Request Confirmed",
+    mainContent,
+    SUCCESS_GREEN,
+  );
+};
+
+exports.shipmentNotificationAdmin = (shipment) => {
+  const mainContent = `
+    <h1 style="font-size: 24px; color: #002611; margin-bottom: 20px;">New Shipment Request</h1>
+    <p style="font-size: 16px; margin-bottom: 15px; color: #333;">A new shipment request has been submitted:</p>
+    
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid ${PRIMARY_BLUE};">
+      <p style="font-size: 16px; color: #333; margin: 0 0 15px 0;"><strong>Customer Information:</strong></p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Name:</strong> ${shipment.fullName}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Email:</strong> <a href="mailto:${shipment.email}" style="color: ${PRIMARY_BLUE};">${shipment.email}</a></p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Phone:</strong> <a href="tel:${shipment.phone}" style="color: ${PRIMARY_BLUE};">${shipment.phone}</a></p>
+      ${shipment.company ? `<p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Company:</strong> ${shipment.company}</p>` : ""}
+    </div>
+
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 4px solid ${WARNING_ORANGE};">
+      <p style="font-size: 16px; color: #333; margin: 0 0 15px 0;"><strong>Shipment Details:</strong></p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Shipment Number:</strong> ${shipment.shipmentNumber}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>From:</strong> ${shipment.origin}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>To:</strong> ${shipment.destination}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Weight:</strong> ${shipment.weight} kg</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Dimensions:</strong> ${shipment.formattedDimensions || `${shipment.dimensions.length}x${shipment.dimensions.width}x${shipment.dimensions.height} cm`}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Cargo Type:</strong> ${shipment.cargoType}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Preferred Ship Date:</strong> ${new Date(shipment.preferredShipDate).toLocaleDateString()}</p>
+      <p style="font-size: 14px; color: #333; margin: 8px 0;"><strong>Estimated Cost:</strong> $${shipment.estimatedCost}</p>
+    </div>
+
+    ${
+      shipment.notes
+        ? `
+    <div style="margin: 25px 0;">
+      <p style="font-size: 14px; color: #333; margin: 0 0 10px 0;"><strong>Additional Notes:</strong></p>
+      <div style="background-color: #fffbf0; padding: 15px; border-radius: 6px; border-left: 4px solid ${WARNING_ORANGE}; color: #333; font-size: 14px; line-height: 1.6;">
+        ${shipment.notes.replace(/\n/g, "<br>")}
+      </div>
+    </div>
+    `
+        : ""
+    }
+
+    <p style="font-size: 13px; color: #999; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
+      <strong>Request ID:</strong> ${shipment._id}<br>
+      <strong>Submitted:</strong> ${new Date(shipment.createdAt).toLocaleString()}
+    </p>
+  `;
+  return baseEmailTemplate("New Shipment Request", mainContent, WARNING_ORANGE);
+};
