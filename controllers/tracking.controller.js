@@ -39,35 +39,21 @@ exports.createTracking = async (req, res) => {
     const {
       trackingNumber,
       currentLocation,
+      deliveryLocation,
       estimatedDelivery,
       status,
       progress,
       events,
+      sender,
+      receiver,
+      productName,
+      typeOfShipment,
+      weight,
+      quantity,
+      totalFreight,
     } = req.body;
 
-    // Validate required fields
-    if (!trackingNumber) {
-      return res.status(400).json({
-        success: false,
-        message: "Tracking number is required",
-      });
-    }
-
-    if (!currentLocation) {
-      return res.status(400).json({
-        success: false,
-        message: "Current location is required",
-      });
-    }
-
-    if (!estimatedDelivery) {
-      return res.status(400).json({
-        success: false,
-        message: "Estimated delivery date is required",
-      });
-    }
-
-    // Validate status enum
+    // Status validation
     const validStatuses = ["Pending", "In Transit", "Delivered"];
     if (status && !validStatuses.includes(status)) {
       return res.status(400).json({
@@ -76,9 +62,10 @@ exports.createTracking = async (req, res) => {
       });
     }
 
-    // Validate progress is a number between 0-100
+    // Progress validation (allow string numbers)
     if (progress !== undefined) {
-      if (typeof progress !== "number" || progress < 0 || progress > 100) {
+      const prog = Number(progress);
+      if (Number.isNaN(prog) || prog < 0 || prog > 100) {
         return res.status(400).json({
           success: false,
           message: "Progress must be a number between 0 and 100",
@@ -86,26 +73,114 @@ exports.createTracking = async (req, res) => {
       }
     }
 
-    // Validate events array structure if provided
-    if (events && Array.isArray(events)) {
-      for (const event of events) {
-        if (!event.date || !event.status || !event.location) {
-          return res.status(400).json({
-            success: false,
-            message: "Each event must have date, status, and location",
-          });
-        }
+    // Estimated delivery date validation
+    let parsedEstimatedDelivery;
+    if (estimatedDelivery) {
+      parsedEstimatedDelivery = new Date(estimatedDelivery);
+      if (isNaN(parsedEstimatedDelivery.getTime())) {
+        return res.status(400).json({
+          success: false,
+          message: "Estimated delivery must be a valid date",
+        });
       }
     }
 
-    // Create tracking with validated data
+    // Email validation helper
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    if (sender && sender.email && !emailRegex.test(sender.email)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Sender email is invalid" });
+    }
+    if (receiver && receiver.email && !emailRegex.test(receiver.email)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Receiver email is invalid" });
+    }
+
+    // Numeric validations (weight, quantity, totalFreight)
+    if (weight !== undefined) {
+      const w = Number(weight);
+      if (Number.isNaN(w) || w < 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Weight must be a positive number",
+          });
+      }
+    }
+    if (quantity !== undefined) {
+      const q = Number(quantity);
+      if (!Number.isInteger(q) || q < 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Quantity must be a non-negative integer",
+          });
+      }
+    }
+    if (totalFreight !== undefined) {
+      const tf = Number(totalFreight);
+      if (Number.isNaN(tf) || tf < 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Total freight must be a non-negative number",
+          });
+      }
+    }
+
+    // Validate events array structure if provided and parse dates
+    let parsedEvents = [];
+    if (events && Array.isArray(events)) {
+      for (const event of events) {
+        if (!event.date || !event.status) {
+          return res.status(400).json({
+            success: false,
+            message: "Each event must have date and status",
+          });
+        }
+        const d = new Date(event.date);
+        if (isNaN(d.getTime())) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: "Each event must have a valid date",
+            });
+        }
+        parsedEvents.push({
+          date: d,
+          status: event.status,
+          location: event.location || undefined,
+          completed: !!event.completed,
+        });
+      }
+    }
+
+    // Build tracking data object only with provided values
     const trackingData = {
-      trackingNumber,
-      currentLocation,
-      estimatedDelivery,
+      ...(trackingNumber ? { trackingNumber } : {}),
+      ...(currentLocation ? { currentLocation } : {}),
+      ...(deliveryLocation ? { deliveryLocation } : {}),
+      ...(parsedEstimatedDelivery
+        ? { estimatedDelivery: parsedEstimatedDelivery }
+        : {}),
       status: status || "Pending",
-      progress: progress || 0,
-      events: events || [],
+      progress: progress !== undefined ? Number(progress) : 0,
+      ...(sender ? { sender } : {}),
+      ...(receiver ? { receiver } : {}),
+      ...(productName ? { productName } : {}),
+      ...(typeOfShipment ? { typeOfShipment } : {}),
+      ...(weight !== undefined ? { weight: Number(weight) } : {}),
+      ...(quantity !== undefined ? { quantity: Number(quantity) } : {}),
+      ...(totalFreight !== undefined
+        ? { totalFreight: Number(totalFreight) }
+        : {}),
+      events: parsedEvents,
     };
 
     const tracking = await Tracking.create(trackingData);
@@ -119,7 +194,11 @@ exports.createTracking = async (req, res) => {
     console.error("Error creating tracking:", error);
 
     // Handle duplicate tracking number error
-    if (error.code === 11000 && error.keyPattern.trackingNumber) {
+    if (
+      error.code === 11000 &&
+      error.keyPattern &&
+      error.keyPattern.trackingNumber
+    ) {
       return res.status(409).json({
         success: false,
         message: "Tracking number already exists",

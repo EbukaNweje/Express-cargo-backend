@@ -70,17 +70,17 @@ exports.createShipment = async (req, res) => {
     }
 
     // Validate dimensions
-    if (
-      !dimensions ||
-      !dimensions.length ||
-      !dimensions.width ||
-      !dimensions.height
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Complete dimensions (length, width, height) are required",
-      });
-    }
+    // if (
+    //   !dimensions ||
+    //   !dimensions.length ||
+    //   !dimensions.width ||
+    //   !dimensions.height
+    // ) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Complete dimensions (length, width, height) are required",
+    //   });
+    // }
 
     // Calculate estimated cost (simple calculation - you can make this more sophisticated)
     const estimatedCost = calculateShippingCost(
