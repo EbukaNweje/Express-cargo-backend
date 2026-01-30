@@ -1,9 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const TimelineSchema = new Schema({
-  date: { type: Date, required: true },
-  status: { type: String, required: true },
-  location: { type: String },
+  date: { type: Date, default: Date.now },
+  status: { type: String, required: true, trim: true },
+  location: { type: String, trim: true },
+  note: { type: String, trim: true, maxlength: 1000 },
   completed: { type: Boolean, default: false },
 });
 

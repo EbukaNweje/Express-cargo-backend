@@ -102,61 +102,63 @@ exports.createTracking = async (req, res) => {
     if (weight !== undefined) {
       const w = Number(weight);
       if (Number.isNaN(w) || w < 0) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Weight must be a positive number",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Weight must be a positive number",
+        });
       }
     }
     if (quantity !== undefined) {
       const q = Number(quantity);
       if (!Number.isInteger(q) || q < 0) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Quantity must be a non-negative integer",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Quantity must be a non-negative integer",
+        });
       }
     }
     if (totalFreight !== undefined) {
       const tf = Number(totalFreight);
       if (Number.isNaN(tf) || tf < 0) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: "Total freight must be a non-negative number",
-          });
+        return res.status(400).json({
+          success: false,
+          message: "Total freight must be a non-negative number",
+        });
       }
     }
 
-    // Validate events array structure if provided and parse dates
+    // Validate events array structure if provided and parse dates (date optional; defaults to now)
     let parsedEvents = [];
     if (events && Array.isArray(events)) {
       for (const event of events) {
-        if (!event.date || !event.status) {
+        if (!event.status) {
           return res.status(400).json({
             success: false,
-            message: "Each event must have date and status",
+            message: "Each event must have a status",
           });
         }
-        const d = new Date(event.date);
-        if (isNaN(d.getTime())) {
-          return res
-            .status(400)
-            .json({
-              success: false,
-              message: "Each event must have a valid date",
-            });
+
+        let d;
+        if (event.date) {
+          d = new Date(event.date);
+          if (isNaN(d.getTime())) {
+            return res
+              .status(400)
+              .json({
+                success: false,
+                message: "Each event must have a valid date",
+              });
+          }
+        } else {
+          d = new Date();
         }
+
         parsedEvents.push({
           date: d,
           status: event.status,
           location: event.location || undefined,
           completed: !!event.completed,
+          note: event.note || undefined,
         });
       }
     }
