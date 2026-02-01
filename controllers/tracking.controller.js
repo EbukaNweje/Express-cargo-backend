@@ -142,12 +142,10 @@ exports.createTracking = async (req, res) => {
         if (event.date) {
           d = new Date(event.date);
           if (isNaN(d.getTime())) {
-            return res
-              .status(400)
-              .json({
-                success: false,
-                message: "Each event must have a valid date",
-              });
+            return res.status(400).json({
+              success: false,
+              message: "Each event must have a valid date",
+            });
           }
         } else {
           d = new Date();
@@ -260,6 +258,31 @@ exports.getTracking = async (req, res) => {
   }
 };
 
+// Helper: parse flexible date strings (ISO, timestamp, or dd/mm/yyyy, dd-mm-yyyy)
+function parseDateFlexible(input) {
+  if (!input && input !== 0) return null;
+  if (input instanceof Date) return isNaN(input.getTime()) ? null : input;
+  if (typeof input === "number") return new Date(input);
+
+  const str = String(input).trim();
+  // Try native parsing first
+  const d = new Date(str);
+  if (!isNaN(d.getTime())) return d;
+
+  // Try dd/mm/yyyy or d/m/yyyy or dd-mm-yyyy
+  const m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if (m) {
+    const day = parseInt(m[1], 10);
+    const month = parseInt(m[2], 10);
+    let year = parseInt(m[3], 10);
+    if (year < 100) year += 2000;
+    const dd = new Date(year, month - 1, day);
+    return isNaN(dd.getTime()) ? null : dd;
+  }
+
+  return null;
+}
+
 exports.updateTracking = async (req, res) => {
   try {
     await ensureConnection();
@@ -270,7 +293,111 @@ exports.updateTracking = async (req, res) => {
         message: "Request body is required",
       });
     }
-    const tracking = await Tracking.findByIdAndUpdate(req.params.id, req.body, {
+
+    // Shallow clone to safely mutate
+    const updates = { ...req.body };
+
+    // Parse and validate estimatedDelivery if present
+    if (updates.estimatedDelivery !== undefined) {
+      const parsed = parseDateFlexible(updates.estimatedDelivery);
+      if (!parsed) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "estimatedDelivery must be a valid date",
+          });
+      }
+      updates.estimatedDelivery = parsed;
+    }
+
+    // Validate progress if provided
+    if (updates.progress !== undefined) {
+      const p = Number(updates.progress);
+      if (Number.isNaN(p) || p < 0 || p > 100) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Progress must be a number between 0 and 100",
+          });
+      }
+      updates.progress = p;
+    }
+
+    // Numeric validations
+    if (updates.weight !== undefined) {
+      const w = Number(updates.weight);
+      if (Number.isNaN(w) || w < 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Weight must be a positive number",
+          });
+      }
+      updates.weight = w;
+    }
+    if (updates.quantity !== undefined) {
+      const q = Number(updates.quantity);
+      if (!Number.isInteger(q) || q < 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Quantity must be a non-negative integer",
+          });
+      }
+      updates.quantity = q;
+    }
+    if (updates.totalFreight !== undefined) {
+      const tf = Number(updates.totalFreight);
+      if (Number.isNaN(tf) || tf < 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: "Total freight must be a non-negative number",
+          });
+      }
+      updates.totalFreight = tf;
+    }
+
+    // Handle events if provided
+    if (updates.events && Array.isArray(updates.events)) {
+      const parsedEvents = [];
+      for (const event of updates.events) {
+        if (!event.status) {
+          return res
+            .status(400)
+            .json({ success: false, message: "Each event must have a status" });
+        }
+        let dateObj;
+        if (event.date) {
+          dateObj = parseDateFlexible(event.date);
+          if (!dateObj) {
+            return res
+              .status(400)
+              .json({
+                success: false,
+                message: "Each event must have a valid date",
+              });
+          }
+        } else {
+          dateObj = new Date();
+        }
+        parsedEvents.push({
+          date: dateObj,
+          status: event.status,
+          location: event.location || undefined,
+          completed: !!event.completed,
+          note: event.note || undefined,
+        });
+      }
+      updates.events = parsedEvents;
+    }
+
+    const tracking = await Tracking.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     });
@@ -287,6 +414,18 @@ exports.updateTracking = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating tracking:", error);
+    // Handle duplicate tracking number error
+    if (
+      error.code === 11000 &&
+      error.keyPattern &&
+      error.keyPattern.trackingNumber
+    ) {
+      return res.status(409).json({
+        success: false,
+        message: "Tracking number already exists",
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: "Error updating tracking",
